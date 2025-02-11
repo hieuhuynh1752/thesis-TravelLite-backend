@@ -1,7 +1,7 @@
-import { JwtGuard } from './jwt.guard';
+import { JwtStrategy } from './jwt.guard';
 
-describe('JwtGuard', () => {
+describe('JwtStrategy', () => {
   it('should be defined', () => {
-    expect(new JwtGuard()).toBeDefined();
+    expect(new JwtStrategy()).toBeDefined();
   });
 });

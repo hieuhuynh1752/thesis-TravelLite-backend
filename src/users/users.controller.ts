@@ -1,13 +1,21 @@
-import { Controller, Get, Param, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  UseGuards,
+  Request,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { JwtGuard } from '../auth/jwt/jwt.guard';
+import { JwtStrategy } from '../auth/jwt/jwt.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   // ✅ Protected Route: Get the authenticated user's profile
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtStrategy)
   @Get('me')
   async getProfile(@Request() req) {
     const userId = req.user.userId; // Retrieved from JWT payload
@@ -15,16 +23,22 @@ export class UsersController {
   }
 
   // ✅ Protected Route: Get a specific user by ID (Admin can use this)
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtStrategy)
   @Get(':id')
   async getUserById(@Param('id') id: string) {
     return this.usersService.findById(+id);
   }
 
   // ✅ Protected Route: Get all users (Can be restricted to admins if needed)
-  @UseGuards(JwtGuard)
+  @UseGuards(JwtStrategy)
   @Get()
   async getAllUsers() {
     return this.usersService.findAll();
+  }
+
+  // Delete User
+  @Delete(':id')
+  async deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.deleteUser(id);
   }
 }

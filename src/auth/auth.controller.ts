@@ -17,7 +17,10 @@ export class AuthController {
       throw new UnauthorizedException('Email already in use.');
     }
 
-    const newUser = await this.usersService.createUser(body.email, body.password);
+    const newUser = await this.usersService.createUser(
+      body.email,
+      body.password,
+    );
     return { message: 'User registered successfully', user: newUser };
   }
 

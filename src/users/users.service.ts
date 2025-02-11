@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class UsersService {
-  // ✅ Create User
+  // Create User
   async createUser(email: string, password: string) {
     const hashedPassword = await bcrypt.hash(password, 10);
     return prisma.user.create({
@@ -14,12 +14,12 @@ export class UsersService {
     });
   }
 
-  // ✅ Find User by Email
+  // Find User by Email
   async findByEmail(email: string) {
     return prisma.user.findUnique({ where: { email } });
   }
 
-  // ✅ Find User by ID
+  // Find User by ID
   async findById(id: number) {
     const user = await prisma.user.findUnique({ where: { id } });
     if (!user) {
@@ -39,5 +39,10 @@ export class UsersService {
       },
     });
     return users;
+  }
+
+  // Delete User
+  async deleteUser(id: number) {
+    return prisma.user.delete({ where: { id } });
   }
 }
