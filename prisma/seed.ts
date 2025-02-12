@@ -13,10 +13,22 @@ async function main() {
       email: 'admin@company.com',
       password: hashedPassword,
       role: UserRole.ADMIN,
+      name: 'Admin Test'
     },
   });
 
-  console.log('✅ Admin account seeded successfully!');
+  await prisma.user.upsert({
+    where: { email: 'emp1@company.com' },
+    update: {}, // No updates needed if it exists
+    create: {
+      email: 'emp1@company.com',
+      password: hashedPassword,
+      role: UserRole.USER,
+      name: 'Employee Test'
+    },
+  });
+
+  console.log('✅ Admin and User account seeded successfully!');
 }
 
 main()
