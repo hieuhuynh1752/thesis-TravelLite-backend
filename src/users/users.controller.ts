@@ -6,6 +6,8 @@ import {
   Request,
   Delete,
   ParseIntPipe,
+  Put,
+  Body,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtStrategy } from '../auth/jwt/jwt.guard';
@@ -34,6 +36,16 @@ export class UsersController {
   @Get()
   async getAllUsers() {
     return this.usersService.findAll();
+  }
+
+  // ✅ Protected Route: Update user data
+  @UseGuards(JwtStrategy)
+  @Put(':id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: { name?: string },
+  ) {
+    return this.usersService.updateUser(+id, updateUserDto);
   }
 
   // Delete User

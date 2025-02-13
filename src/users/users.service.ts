@@ -7,10 +7,15 @@ const prisma = new PrismaClient();
 @Injectable()
 export class UsersService {
   // Create User
-  async createUser(email: string, password: string) {
+  async createUser(email: string, password: string, name?: string) {
     const hashedPassword = await bcrypt.hash(password, 10);
     return prisma.user.create({
-      data: { email, password: hashedPassword, role: UserRole.USER },
+      data: {
+        email,
+        password: hashedPassword,
+        role: UserRole.USER,
+        name: name ?? email,
+      },
     });
   }
 
@@ -34,11 +39,21 @@ export class UsersService {
     const users = await prisma.user.findMany({
       select: {
         id: true,
+        name: true,
         email: true,
+        role: true,
         createdAt: true,
       },
     });
     return users;
+  }
+
+  async updateUser(id: number, userData: { name?: string }) {
+    const user = await prisma.user.findFirst({ where: { id } });
+    if (!user) throw new Error('User not found');
+
+    Object.assign(user, userData);
+    return prisma.user.update({ where: { id }, data: user });
   }
 
   // Delete User

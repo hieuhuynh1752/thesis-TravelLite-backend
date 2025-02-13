@@ -11,7 +11,9 @@ export class AuthController {
 
   // ✅ Register Route
   @Post('register')
-  async register(@Body() body: { email: string; password: string }) {
+  async register(
+    @Body() body: { email: string; password: string; name?: string },
+  ) {
     const existingUser = await this.usersService.findByEmail(body.email);
     if (existingUser) {
       throw new UnauthorizedException('Email already in use.');
@@ -20,6 +22,7 @@ export class AuthController {
     const newUser = await this.usersService.createUser(
       body.email,
       body.password,
+      body.name,
     );
     return { message: 'User registered successfully', user: newUser };
   }
