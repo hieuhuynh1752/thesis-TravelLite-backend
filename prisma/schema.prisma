@@ -82,8 +82,11 @@ model EventParticipant {
   user       User                   @relation(fields: [userId], references: [id])
   userId     Int
   assignedAt DateTime               @default(now())
+  updatedAt  DateTime               @default(now())
   status     EventParticipantStatus @default(PENDING)
   travelPlan TravelPlan?
+
+  @@unique([userId, eventId])
 }
 
 model TravelPlan {

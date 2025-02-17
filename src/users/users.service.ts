@@ -26,7 +26,36 @@ export class UsersService {
 
   // Find User by ID
   async findById(id: number) {
-    const user = await prisma.user.findUnique({ where: { id } });
+    const user = await prisma.user.findUnique({
+      where: { id },
+      include: {
+        eventsCreated: {
+          include: {
+            location: true,
+            participants: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+        eventsParticipated: {
+          include: {
+            event: {
+              include: {
+                location: true,
+                creator: true,
+                participants: {
+                  include: {
+                    user: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
