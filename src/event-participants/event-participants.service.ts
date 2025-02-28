@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import {
   EventParticipant,
   EventParticipantStatus,
-} from '../users/entities/event-participant.entity';
+} from '../entities/event-participant.entity';
 
 @Injectable()
 export class EventParticipantsService {

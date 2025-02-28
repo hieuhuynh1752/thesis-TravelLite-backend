@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { EventParticipantsService } from './event-participants.service';
 import { JwtStrategy } from '../auth/jwt/jwt.guard';
-import { EventParticipantStatus } from '../users/entities/event-participant.entity';
+import { EventParticipantStatus } from '../entities/event-participant.entity';
 
 @Controller('participants')
 @UseGuards(JwtStrategy)

@@ -7,6 +7,7 @@ import { EventsModule } from './events/events.module';
 import { TravelPlansModule } from './travel-plans/travel-plans.module';
 import { PlacesModule } from './places/places.module';
 import { EventParticipantsModule } from './event-participants/event-participants.module';
+import { EmissionFactorsModule } from './emissionFactors/emissionFactors.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { EventParticipantsModule } from './event-participants/event-participants
     TravelPlansModule,
     PlacesModule,
     EventParticipantsModule,
+    EmissionFactorsModule,
   ],
   providers: [PrismaService],
 })

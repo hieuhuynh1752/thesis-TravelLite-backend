@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { PlacesService } from './places.service';
 import { JwtStrategy } from '../auth/jwt/jwt.guard';
-import { Place } from '../users/entities/place.entity';
+import { Place } from '../entities/place.entity';
 
 @Controller('places')
 @UseGuards(JwtStrategy)

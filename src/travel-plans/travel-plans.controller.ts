@@ -19,8 +19,8 @@ export class TravelPlansController {
   constructor(private travelPlansService: TravelPlansService) {}
 
   @Post()
-  async createTravelPlan(body: TravelPlan) {
-    return this.travelPlansService.createTravelPlan(body);
+  async createTravelPlan(@Body() body: { data: TravelPlan }) {
+    return this.travelPlansService.createTravelPlan(body.data);
   }
 
   @Get()
@@ -33,11 +33,15 @@ export class TravelPlansController {
     return this.travelPlansService.getTravelPlanById(id);
   }
 
-  @Put(':id')
-  async updateTravelPlan(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() body: { originPlaceId: number; destinationPlaceId: number },
+  @Get('/participant/:participantId')
+  async getTravelPlanByParticipantId(
+    @Param('participantId', ParseIntPipe) participantId: number,
   ) {
+    return this.travelPlansService.getTravelPlanByParticipantId(participantId);
+  }
+
+  @Put(':id')
+  async updateTravelPlan(@Param('id', ParseIntPipe) id: number, @Body() body) {
     return this.travelPlansService.updateTravelPlan(id, body);
   }
 

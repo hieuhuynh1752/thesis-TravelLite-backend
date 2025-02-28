@@ -1,12 +1,12 @@
 import {
-  Controller,
-  Post,
-  Get,
-  Put,
-  Delete,
-  Param,
   Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
   ParseIntPipe,
+  Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
@@ -14,8 +14,9 @@ import { JwtStrategy } from '../auth/jwt/jwt.guard';
 import { PlacesService } from '../places/places.service';
 import { EventParticipantsService } from '../event-participants/event-participants.service';
 import { TravelPlansService } from '../travel-plans/travel-plans.service';
-import { Event } from '../users/entities/event.entity';
-import { Place } from '../users/entities/place.entity';
+import { Event } from '../entities/event.entity';
+import { Place } from '../entities/place.entity';
+import { EventParticipantStatus } from '../entities/event-participant.entity';
 
 @Controller('events')
 @UseGuards(JwtStrategy)
@@ -24,7 +25,6 @@ export class EventsController {
     private eventsService: EventsService,
     private placesService: PlacesService,
     private participantsService: EventParticipantsService,
-    private travelPlansService: TravelPlansService,
   ) {}
 
   // Create Event
@@ -50,6 +50,11 @@ export class EventsController {
         eventId: eventObject.id,
       });
     }
+    await this.participantsService.createParticipant({
+      userId: body.eventData.creatorId,
+      eventId: eventObject.id,
+      status: EventParticipantStatus.ACCEPTED,
+    });
     return eventObject;
   }
 

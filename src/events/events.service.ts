@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, UseGuards } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtStrategy } from '../auth/jwt/jwt.guard';
-import { Event } from '../users/entities/event.entity';
+import { Event } from '../entities/event.entity';
 
 @Injectable()
 @UseGuards(JwtStrategy)

@@ -52,12 +52,14 @@ async function main() {
   });
 
   const place = await prisma.place.upsert({
-    where: { googlePlaceId: 'ChIJ2eUgeAK6j4ARbn5u_wAGqWA' },
+    where: { googlePlaceId: 'ChIJ8TpEXAgKxkcRhM3sl6nX8i0' },
     update: {},
     create: {
-      name: 'GooglePlex',
-      address: '1600 Amphitheatre Parkway, Mountain View, CA 94043, USA',
-      googlePlaceId: 'ChIJ2eUgeAK6j4ARbn5u_wAGqWA',
+      name: 'VU Amsterdam',
+      address: 'De Boelelaan 1105, 1081 HV Amsterdam, Netherlands',
+      googlePlaceId: 'ChIJ8TpEXAgKxkcRhM3sl6nX8i0',
+      latitude: 52.33403212192574,
+      longtitude: 4.865698439630396,
     },
   });
 
@@ -68,6 +70,8 @@ async function main() {
       name: 'LUT University',
       address: 'Yliopistonkatu 34, 53850 Lappeenranta, Finland',
       googlePlaceId: 'ChIJmZVaQ_SUkEYRzaXC3OMePhM',
+      latitude: 61.06508990966687,
+      longtitude: 28.094402970867108,
     },
   });
 
@@ -78,6 +82,8 @@ async function main() {
       name: 'Aalto University',
       address: 'Otakaari 24, 02150 Espoo, Finland',
       googlePlaceId: 'ChIJ0Z4_0ez1jUYRWt0q5qjnQEI',
+      latitude: 60.185224990428,
+      longtitude: 24.832372799645032,
     },
   });
 
@@ -85,7 +91,7 @@ async function main() {
     data: {
       title: 'Tech Conference 2025',
       description: 'Annual Tech meetup at Google HQ',
-      dateTime: new Date('2025-02-26'),
+      dateTime: new Date('2025-02-26T15:30:00.000Z'),
       status: 'ACTIVE',
       creatorId: user1.id,
       locationId: place.id,
@@ -96,7 +102,7 @@ async function main() {
     data: {
       title: 'Startup Networking 2025 Night',
       description: 'Meet startup founders and investors at GooglePlex',
-      dateTime: new Date('2025-02-23'),
+      dateTime: new Date('2025-02-28T16:30:00.000Z'),
       status: 'ACTIVE',
       creatorId: user2.id,
       locationId: place.id,
@@ -115,11 +121,11 @@ async function main() {
     },
   });
 
-  await prisma.event.create({
+  const empEvent2 = await prisma.event.create({
     data: {
       title: 'PhD Interview Spring 2025',
       description: 'Interview for PhD position at Aalto',
-      dateTime: new Date('2025-02-18T09:30:00.000Z'),
+      dateTime: new Date('2025-03-01T09:30:00.000Z'),
       status: 'ACTIVE',
       creatorId: emp1.id,
       locationId: placeAaltoUni.id,
@@ -139,6 +145,22 @@ async function main() {
     data: {
       userId: user2.id,
       eventId: event1.id,
+      status: 'ACCEPTED',
+    },
+  });
+
+  await prisma.eventParticipant.create({
+    data: {
+      userId: emp1.id,
+      eventId: event3.id,
+      status: 'ACCEPTED',
+    },
+  });
+
+  await prisma.eventParticipant.create({
+    data: {
+      userId: emp1.id,
+      eventId: empEvent2.id,
       status: 'ACCEPTED',
     },
   });
@@ -165,7 +187,56 @@ async function main() {
     },
   });
 
-  console.log('✅ Admin and User account seeded successfully!');
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'driving',
+      value: 120,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'bus',
+      value: 80,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'subway',
+      value: 50,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'biking',
+      value: 0,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'walking',
+      value: 0,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'heavy_rail',
+      value: 30,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'default',
+      value: 120,
+    },
+  });
+
+  console.log('✅ Seeded successfully!');
 }
 
 main()

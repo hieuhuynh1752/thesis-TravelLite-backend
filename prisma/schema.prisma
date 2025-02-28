@@ -72,58 +72,49 @@ model Event {
   dateTime     DateTime
   locationId   Int?
   location     Place?             @relation("EventLocation", fields: [locationId], references: [id])
-  travelPlans  TravelPlan[]
 }
 
 model EventParticipant {
-  id         Int                    @id @default(autoincrement())
-  event      Event                  @relation(fields: [eventId], references: [id])
-  eventId    Int
-  user       User                   @relation(fields: [userId], references: [id])
-  userId     Int
-  assignedAt DateTime               @default(now())
-  updatedAt  DateTime               @default(now())
-  status     EventParticipantStatus @default(PENDING)
-  travelPlan TravelPlan?
+  id           Int                    @id @default(autoincrement())
+  event        Event                  @relation(fields: [eventId], references: [id])
+  eventId      Int
+  user         User                   @relation(fields: [userId], references: [id])
+  userId       Int
+  assignedAt   DateTime               @default(now())
+  updatedAt    DateTime               @default(now())
+  status       EventParticipantStatus @default(PENDING)
+  travelPlan   TravelPlan?
+  travelPlanId Int?                   @unique
 
   @@unique([userId, eventId])
 }
 
 model TravelPlan {
-  id                 Int        @id @default(autoincrement())
-  eventId            Int
-  eventParticipantId Int        @unique
-  originPlaceId      Int
-  destinationPlaceId Int
+  id                 Int              @id @default(autoincrement())
+  eventParticipant   EventParticipant @relation(fields: [eventParticipantId], references: [id])
+  eventParticipantId Int              @unique
+  plannedAt          DateTime         @default(now())
+  origin             String
+  destination        String
+  totalCo2           Float
   travelMode         TravelMode
-  plannedAt          DateTime   @default(now())
-  waypoints          Waypoint[]
-
-  event            Event            @relation(fields: [eventId], references: [id])
-  eventParticipant EventParticipant @relation(fields: [eventParticipantId], references: [id])
-  origin           Place            @relation("Origin", fields: [originPlaceId], references: [id])
-  destination      Place            @relation("Destination", fields: [destinationPlaceId], references: [id])
+  travelSteps        Json[]
+  routeDetails       Json
 }
 
 model Place {
-  id                     Int          @id @default(autoincrement())
-  googlePlaceId          String       @unique
-  name                   String?
-  address                String?
-  createdAt              DateTime     @default(now())
-  waypoints              Waypoint[]
-  events                 Event[]      @relation("EventLocation")
-  originTravelPlans      TravelPlan[] @relation("Origin")
-  destinationTravelPlans TravelPlan[] @relation("Destination")
+  id            Int      @id @default(autoincrement())
+  googlePlaceId String   @unique
+  latitude      Float
+  longtitude    Float
+  name          String?
+  address       String?
+  createdAt     DateTime @default(now())
+  events        Event[]  @relation("EventLocation")
 }
 
-model Waypoint {
-  id           Int     @id @default(autoincrement())
-  travelPlanId Int
-  placeId      Int
-  stopOrder    Int?
-  notes        String?
-
-  travelPlan TravelPlan @relation(fields: [travelPlanId], references: [id])
-  place      Place      @relation(fields: [placeId], references: [id])
+model emissionFactor {
+  id          Int    @id @default(autoincrement())
+  vehicleType String @unique
+  value       Int
 }
