@@ -90,8 +90,8 @@ async function main() {
   const event1 = await prisma.event.create({
     data: {
       title: 'Tech Conference 2025',
-      description: 'Annual Tech meetup at Google HQ',
-      dateTime: new Date('2025-02-26T15:30:00.000Z'),
+      description: 'Annual Tech meetup',
+      dateTime: new Date('2025-03-26T15:30:00.000Z'),
       status: 'ACTIVE',
       creatorId: user1.id,
       locationId: place.id,
@@ -102,7 +102,7 @@ async function main() {
     data: {
       title: 'Startup Networking 2025 Night',
       description: 'Meet startup founders and investors at GooglePlex',
-      dateTime: new Date('2025-02-28T16:30:00.000Z'),
+      dateTime: new Date('2025-03-28T16:30:00.000Z'),
       status: 'ACTIVE',
       creatorId: user2.id,
       locationId: place.id,
@@ -125,7 +125,7 @@ async function main() {
     data: {
       title: 'PhD Interview Spring 2025',
       description: 'Interview for PhD position at Aalto',
-      dateTime: new Date('2025-03-01T09:30:00.000Z'),
+      dateTime: new Date('2025-04-01T09:30:00.000Z'),
       status: 'ACTIVE',
       creatorId: emp1.id,
       locationId: placeAaltoUni.id,
@@ -203,13 +203,6 @@ async function main() {
 
   await prisma.emissionFactor.create({
     data: {
-      vehicleType: 'subway',
-      value: 50,
-    },
-  });
-
-  await prisma.emissionFactor.create({
-    data: {
       vehicleType: 'biking',
       value: 0,
     },
@@ -226,6 +219,111 @@ async function main() {
     data: {
       vehicleType: 'heavy_rail',
       value: 30,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'cable_car',
+      value: 30,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'commuter_train',
+      value: 35,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'ferry',
+      value: 180,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'funicular',
+      value: 40,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'gondola_lift',
+      value: 25,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'high_speed_train',
+      value: 15,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'intercity_bus',
+      value: 60,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'long_distance_train',
+      value: 20,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'metro_rail',
+      value: 40,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'monorail',
+      value: 50,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'rail',
+      value: 35,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'share_taxi',
+      value: 120,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'subway',
+      value: 50,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'tram',
+      value: 25,
+    },
+  });
+
+  await prisma.emissionFactor.create({
+    data: {
+      vehicleType: 'trolleybus',
+      value: 50,
     },
   });
 

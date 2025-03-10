@@ -28,13 +28,20 @@ export class UsersService {
   async findById(id: number) {
     const user = await prisma.user.findUnique({
       where: { id },
-      include: {
+      select: {
+        // Exclude password at the DB level
+        id: true,
+        name: true,
+        email: true,
+        role: true,
         eventsCreated: {
           include: {
             location: true,
             participants: {
               include: {
-                user: true,
+                user: {
+                  select: { id: true, name: true, email: true, role: true }, // Select only necessary fields
+                },
               },
             },
           },
@@ -44,14 +51,19 @@ export class UsersService {
             event: {
               include: {
                 location: true,
-                creator: true,
+                creator: {
+                  select: { id: true, name: true, email: true, role: true },
+                },
                 participants: {
                   include: {
-                    user: true,
+                    user: {
+                      select: { id: true, name: true, email: true, role: true },
+                    },
                   },
                 },
               },
             },
+            travelPlan: true,
           },
         },
       },
@@ -59,8 +71,7 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-    const { password, ...userData } = user; // Exclude password
-    return userData;
+    return user; // Excluded password
   }
 
   // ✅ Get All Users
@@ -71,7 +82,6 @@ export class UsersService {
         name: true,
         email: true,
         role: true,
-        createdAt: true,
       },
     });
     return users;

@@ -32,23 +32,25 @@ export class EventsController {
   async createEvent(
     @Body()
     body: {
-      eventData: Omit<Event, 'id' | 'createdAt'>;
-      participantIds: number[];
+      eventData: Omit<Event, 'id' | 'createdAt' | 'locationId'>;
       placeData: Omit<Place, 'id' | 'createdAt'>;
     },
   ) {
     const placeObject: Place = await this.placesService.checkOrCreatePlace(
       body.placeData,
     );
+    console.log(placeObject);
     const eventObject: Event = await this.eventsService.createEvent({
       ...body.eventData,
       locationId: placeObject.id,
     });
-    for (const participantId of body.participantIds) {
-      await this.participantsService.createParticipant({
-        userId: participantId,
-        eventId: eventObject.id,
-      });
+    if (body.eventData.participantIds) {
+      for (const participantId of body.eventData.participantIds) {
+        await this.participantsService.createParticipant({
+          userId: participantId,
+          eventId: eventObject.id,
+        });
+      }
     }
     await this.participantsService.createParticipant({
       userId: body.eventData.creatorId,
@@ -75,9 +77,45 @@ export class EventsController {
   async updateEvent(
     @Param('id', ParseIntPipe) id: number,
     @Body()
-    body: Omit<Event, 'id' | 'createdAt' | 'participantIds'>,
+    body: {
+      eventData: Omit<Event, 'id' | 'createdAt'>;
+      placeData: Omit<Place, 'id' | 'createdAt'> | undefined;
+    },
   ) {
-    return this.eventsService.updateEvent(id, body);
+    let placeId = body.eventData.locationId;
+    if (body.placeData) {
+      const placeObject: Place = await this.placesService.checkOrCreatePlace(
+        body.placeData,
+      );
+      placeId = placeObject.id;
+    }
+    // const eventObject: Event = await this.eventsService.getEventById(id);
+    // if (body.eventData.participantIds) {
+    //   for (const participantId of body.eventData.participantIds) {
+    //     await this.participantsService.checkOrCreateParticipant({
+    //       userId: participantId,
+    //       eventId: id,
+    //     });
+    //   }
+    //   if (eventObject.participantIds) {
+    //     for (const participantId of eventObject.participantIds.filter(
+    //       (participant) =>
+    //         !body.eventData.participantIds?.includes(participant),
+    //     )) {
+    //       await this.participantsService.deleteParticipantWithSettings(
+    //         participantId,
+    //         id,
+    //       );
+    //     }
+    //   }
+    // }
+    const participantIds = body.eventData.participantIds;
+    participantIds?.unshift(body.eventData.creatorId);
+    return this.eventsService.updateEvent(id, {
+      ...body.eventData,
+      participantIds: participantIds,
+      locationId: placeId,
+    });
   }
 
   // Delete Event

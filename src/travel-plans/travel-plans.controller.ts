@@ -40,9 +40,15 @@ export class TravelPlansController {
     return this.travelPlansService.getTravelPlanByParticipantId(participantId);
   }
 
-  @Put(':id')
-  async updateTravelPlan(@Param('id', ParseIntPipe) id: number, @Body() body) {
-    return this.travelPlansService.updateTravelPlan(id, body);
+  @Put('/participant/:participantId')
+  async updateTravelPlanByParticipantId(
+    @Param('participantId', ParseIntPipe) participantId: number,
+    @Body() body: { data: TravelPlan },
+  ) {
+    return this.travelPlansService.updateTravelPlanByParticipantId(
+      participantId,
+      body.data,
+    );
   }
 
   @Delete(':id')

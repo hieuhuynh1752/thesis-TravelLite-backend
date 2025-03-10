@@ -37,12 +37,13 @@ export class PlacesService {
   async checkOrCreatePlace(
     data: Omit<Place, 'id' | 'createdAt'>,
   ): Promise<Place> {
-    const existingPlace = await this.prisma.place.findUnique({
+    let existingPlace = await this.prisma.place.findUnique({
       where: { googlePlaceId: data.googlePlaceId },
     });
     if (existingPlace) {
       return existingPlace;
     }
-    return this.createPlace(data);
+    existingPlace = await this.createPlace(data);
+    return existingPlace;
   }
 }

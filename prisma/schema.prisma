@@ -28,7 +28,6 @@ enum EventOccurrence {
 }
 
 enum EventStatus {
-  DRAFT
   ACTIVE
   FINISHED
   CANCELLED
@@ -68,7 +67,7 @@ model Event {
   description  String?
   occurrence   EventOccurrence    @default(SINGLE)
   participants EventParticipant[]
-  status       EventStatus        @default(DRAFT)
+  status       EventStatus        @default(ACTIVE)
   dateTime     DateTime
   locationId   Int?
   location     Place?             @relation("EventLocation", fields: [locationId], references: [id])

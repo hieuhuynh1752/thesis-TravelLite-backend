@@ -13,8 +13,11 @@ export class EventsService {
     return this.prisma.event.create({
       data: {
         title: data.title,
+        description: data.description,
         creatorId: data.creatorId,
         dateTime: data.dateTime,
+        locationId: data.locationId,
+        occurrence: data.occurrence,
       },
     });
   }
@@ -40,13 +43,38 @@ export class EventsService {
   }
 
   // Update Event
-  async updateEvent(
-    id: number,
-    data: Omit<Event, 'id' | 'participantIds' | 'createdAt'>,
-  ) {
+  async updateEvent(id: number, data: Omit<Event, 'id' | 'createdAt'>) {
+    const { creatorId, participantIds, ...rest } = data;
+    const existingEvent = await this.prisma.event.findUnique({
+      where: { id },
+      include: { participants: { select: { userId: true } } },
+    });
+
+    if (!existingEvent) {
+      throw new NotFoundException(`Event with ID ${id} not found`);
+    }
+    const existingIds = new Set(
+      existingEvent.participants.map((user) => user.userId),
+    );
+    const participantsToAdd = participantIds
+      ?.filter((userId) => !existingIds.has(userId))
+      .map((userId) => ({ userId }));
+
+    const participantsToRemove = existingEvent.participants
+      .filter((participant) => !participantIds?.includes(participant.userId))
+      .map((participant) => ({ userId: participant.userId }));
+
     return this.prisma.event.update({
       where: { id },
-      data,
+      data: {
+        ...rest,
+        participants: {
+          deleteMany: participantsToRemove,
+          createMany: { data: participantsToAdd! },
+        },
+        updatedAt: new Date(),
+      },
+      include: { participants: true },
     });
   }
 

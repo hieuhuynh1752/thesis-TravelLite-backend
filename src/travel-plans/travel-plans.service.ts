@@ -44,8 +44,24 @@ export class TravelPlansService {
     return plan;
   }
 
-  async updateTravelPlan(id: number, data) {
-    return this.prisma.travelPlan.update({ where: { id }, data });
+  async updateTravelPlanByParticipantId(
+    participantId: number,
+    data: TravelPlan,
+  ) {
+    return this.prisma.travelPlan.update({
+      where: { eventParticipantId: participantId },
+      data: {
+        eventParticipantId: data.eventParticipantId,
+        origin: data.origin,
+        destination: data.destination,
+        totalCo2: data.totalCo2,
+        travelMode: data.travelMode,
+        travelSteps: data.travelSteps as Prisma.InputJsonValue[],
+        routeDetails: data.routeDetails as
+          | Prisma.InputJsonValue
+          | Prisma.NullTypes.JsonNull,
+      },
+    });
   }
 
   async deleteTravelPlan(id: number) {

@@ -14,6 +14,24 @@ export class EventParticipantsService {
     return this.prisma.eventParticipant.create({ data });
   }
 
+  //Check or create Participant
+  async checkOrCreateParticipant(
+    data: Omit<EventParticipant, 'id' | 'assignedAt'>,
+  ) {
+    let existingParticipantInfo = await this.prisma.eventParticipant.findUnique(
+      {
+        where: {
+          userId_eventId: { userId: data.userId, eventId: data.eventId },
+        },
+      },
+    );
+    if (existingParticipantInfo) {
+      return existingParticipantInfo;
+    }
+    existingParticipantInfo = await this.createParticipant(data);
+    return existingParticipantInfo;
+  }
+
   // Get All Participants
   async getAllParticipants() {
     return this.prisma.eventParticipant.findMany();
@@ -40,5 +58,12 @@ export class EventParticipantsService {
   // Delete Participant
   async deleteParticipant(id: number) {
     return this.prisma.eventParticipant.delete({ where: { id } });
+  }
+
+  //Delete Participant with UserId and EventId
+  async deleteParticipantWithSettings(userId: number, eventId: number) {
+    return this.prisma.eventParticipant.delete({
+      where: { userId_eventId: { userId, eventId } },
+    });
   }
 }
