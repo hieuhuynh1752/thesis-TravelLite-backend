@@ -72,7 +72,7 @@ export class EmissionFactorsService {
     vehicleType?: string,
   ): Promise<number> {
     const factorRecord = await this.prisma.emissionFactor.findUnique({
-      where: { vehicleType: vehicleType || type },
+      where: { vehicleType: vehicleType?.toLowerCase() || type.toLowerCase() },
     });
     const factor = factorRecord?.value || 0;
     return (distance / 1000) * factor;
