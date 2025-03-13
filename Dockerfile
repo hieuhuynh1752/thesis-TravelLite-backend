@@ -27,4 +27,4 @@ EXPOSE 8000
 
 # Run the app
 # Run migrations, seed, and start the app after DB is ready
-CMD ./wait-for.sh postgres npx prisma migrate deploy && npx prisma db seed && npm run start:dev
+CMD npm run start:migrate:prod

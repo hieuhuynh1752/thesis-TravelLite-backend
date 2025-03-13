@@ -3,7 +3,7 @@ set -e
 
 host="$1"
 shift
-cmd="$@"
+cmd="npm run start:migrate:prod"
 
 until pg_isready -h "$host" -U admin; do
   >&2 echo "Postgres is unavailable - sleeping"
