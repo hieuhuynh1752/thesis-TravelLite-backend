@@ -8,7 +8,13 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost',
+      'https://travellite-thesis-se4gd.life',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
   });
   app.use(bodyParser.json({ limit: '5mb' }));
