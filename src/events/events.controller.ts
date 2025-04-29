@@ -19,7 +19,6 @@ import { Place } from '../entities/place.entity';
 import { EventParticipantStatus } from '../entities/event-participant.entity';
 
 @Controller('events')
-@UseGuards(JwtStrategy)
 export class EventsController {
   constructor(
     private eventsService: EventsService,
@@ -28,6 +27,7 @@ export class EventsController {
   ) {}
 
   // Create Event
+  @UseGuards(JwtStrategy)
   @Post()
   async createEvent(
     @Body()
@@ -61,18 +61,33 @@ export class EventsController {
   }
 
   // Get All Events
+  @UseGuards(JwtStrategy)
   @Get()
   async getAllEvents() {
     return this.eventsService.getAllEvents();
   }
 
+  // Get Public Events
+  @Get('/public')
+  async getPublicEvents() {
+    return this.eventsService.getPublicEvents();
+  }
+
+  // Get Public Single Event
+  @Get('/public/:id')
+  async getPublicEventById(@Param('id', ParseIntPipe) id: number) {
+    return this.eventsService.getPublicEventById(id);
+  }
+
   // Get Single Event
+  @UseGuards(JwtStrategy)
   @Get(':id')
   async getEventById(@Param('id', ParseIntPipe) id: number) {
     return this.eventsService.getEventById(id);
   }
 
   // Update Event
+  @UseGuards(JwtStrategy)
   @Put(':id')
   async updateEvent(
     @Param('id', ParseIntPipe) id: number,
@@ -119,6 +134,7 @@ export class EventsController {
   }
 
   // Delete Event
+  @UseGuards(JwtStrategy)
   @Delete(':id')
   async deleteEvent(@Param('id', ParseIntPipe) id: number) {
     return this.eventsService.deleteEvent(id);

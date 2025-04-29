@@ -27,12 +27,56 @@ export class EventsService {
     return this.prisma.event.findMany();
   }
 
+  // Read All Events
+  async getPublicEvents() {
+    return this.prisma.event.findMany({
+      where: { visibility: 'PUBLIC' },
+      include: {
+        location: true,
+        creator: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+        participants: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+            travelPlan: true,
+          },
+        },
+      },
+    });
+  }
+
   // Read Single Event by ID
+  async getPublicEventById(id: number) {
+    const event = await this.prisma.event.findUnique({
+      where: { id, visibility: 'PUBLIC' },
+      include: {
+        location: true,
+        creator: true,
+        participants: {
+          include: { user: true },
+        },
+      },
+    });
+    if (!event) throw new NotFoundException(`Event with ID ${id} not found`);
+    return event;
+  }
+
   async getEventById(id: number) {
     const event = await this.prisma.event.findUnique({
       where: { id },
       include: {
         location: true,
+        creator: true,
         participants: {
           include: { user: true },
         },

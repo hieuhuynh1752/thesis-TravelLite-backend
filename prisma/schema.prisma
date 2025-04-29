@@ -33,6 +33,11 @@ enum EventStatus {
   CANCELLED
 }
 
+enum EventVisibility {
+  PUBLIC
+  PRIVATE
+}
+
 enum EventParticipantStatus {
   DECLINED
   PENDING
@@ -71,6 +76,7 @@ model Event {
   dateTime     DateTime
   locationId   Int?
   location     Place?             @relation("EventLocation", fields: [locationId], references: [id])
+  visibility   EventVisibility    @default(PRIVATE)
 }
 
 model EventParticipant {

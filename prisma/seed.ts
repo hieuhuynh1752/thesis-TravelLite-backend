@@ -91,10 +91,11 @@ async function main() {
     data: {
       title: 'Tech Conference 2025',
       description: 'Annual Tech meetup',
-      dateTime: new Date('2025-03-26T15:30:00.000Z'),
+      dateTime: new Date('2025-05-26T15:30:00.000Z'),
       status: 'ACTIVE',
       creatorId: user1.id,
       locationId: place.id,
+      visibility: 'PUBLIC',
     },
   });
 
@@ -102,10 +103,11 @@ async function main() {
     data: {
       title: 'Startup Networking 2025 Night',
       description: 'Meet startup founders and investors at GooglePlex',
-      dateTime: new Date('2025-03-28T16:30:00.000Z'),
+      dateTime: new Date('2025-05-28T16:30:00.000Z'),
       status: 'ACTIVE',
       creatorId: user2.id,
       locationId: place.id,
+      visibility: 'PUBLIC',
     },
   });
 
@@ -118,6 +120,7 @@ async function main() {
       creatorId: emp1.id,
       locationId: placeLUTUni.id,
       occurrence: 'DAILY',
+      visibility: 'PRIVATE',
     },
   });
 
@@ -125,11 +128,12 @@ async function main() {
     data: {
       title: 'PhD Interview Spring 2025',
       description: 'Interview for PhD position at Aalto',
-      dateTime: new Date('2025-04-01T09:30:00.000Z'),
+      dateTime: new Date('2025-05-01T09:30:00.000Z'),
       status: 'ACTIVE',
       creatorId: emp1.id,
       locationId: placeAaltoUni.id,
       occurrence: 'SINGLE',
+      visibility: 'PRIVATE',
     },
   });
 
