@@ -24,7 +24,22 @@ export class EventsService {
 
   // Read All Events
   async getAllEvents() {
-    return this.prisma.event.findMany();
+    return this.prisma.event.findMany({
+      include: {
+        location: true,
+        creator: {
+          select: { id: true, name: true, email: true, role: true },
+        },
+        participants: {
+          include: {
+            user: {
+              select: { id: true, name: true, email: true, role: true },
+            },
+            travelPlan: true,
+          },
+        },
+      },
+    });
   }
 
   // Read All Events
