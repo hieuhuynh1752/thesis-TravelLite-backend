@@ -14,6 +14,8 @@ export class TravelPlansService {
         destination: data.destination,
         totalCo2: data.totalCo2,
         travelMode: data.travelMode,
+        departAt: data.departAt,
+        arrivalBy: data.arrivalBy,
         travelSteps: data.travelSteps as Prisma.InputJsonValue[],
         routeDetails: data.routeDetails as
           | Prisma.InputJsonValue
@@ -33,8 +35,8 @@ export class TravelPlansService {
     return plan;
   }
 
-  async getTravelPlanByParticipantId(participantId: number) {
-    const plan = await this.prisma.travelPlan.findUnique({
+  async getTravelPlansByParticipantId(participantId: number) {
+    const plan = await this.prisma.travelPlan.findMany({
       where: { eventParticipantId: participantId },
     });
     if (!plan)
@@ -44,18 +46,17 @@ export class TravelPlansService {
     return plan;
   }
 
-  async updateTravelPlanByParticipantId(
-    participantId: number,
-    data: TravelPlan,
-  ) {
+  async updateTravelPlanByPlanId(planId: number, data: TravelPlan) {
     return this.prisma.travelPlan.update({
-      where: { eventParticipantId: participantId },
+      where: { id: planId },
       data: {
         eventParticipantId: data.eventParticipantId,
         origin: data.origin,
         destination: data.destination,
         totalCo2: data.totalCo2,
         travelMode: data.travelMode,
+        departAt: data.departAt,
+        arrivalBy: data.arrivalBy,
         travelSteps: data.travelSteps as Prisma.InputJsonValue[],
         routeDetails: data.routeDetails as
           | Prisma.InputJsonValue

@@ -34,21 +34,18 @@ export class TravelPlansController {
   }
 
   @Get('/participant/:participantId')
-  async getTravelPlanByParticipantId(
+  async getTravelPlansByParticipantId(
     @Param('participantId', ParseIntPipe) participantId: number,
   ) {
-    return this.travelPlansService.getTravelPlanByParticipantId(participantId);
+    return this.travelPlansService.getTravelPlansByParticipantId(participantId);
   }
 
-  @Put('/participant/:participantId')
+  @Put('/:id')
   async updateTravelPlanByParticipantId(
-    @Param('participantId', ParseIntPipe) participantId: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() body: { data: TravelPlan },
   ) {
-    return this.travelPlansService.updateTravelPlanByParticipantId(
-      participantId,
-      body.data,
-    );
+    return this.travelPlansService.updateTravelPlanByPlanId(id, body.data);
   }
 
   @Delete(':id')

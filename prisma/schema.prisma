@@ -49,6 +49,7 @@ enum TravelMode {
   TRANSIT
   BICYCLING
   WALKING
+  FLYING
 }
 
 model User {
@@ -80,16 +81,15 @@ model Event {
 }
 
 model EventParticipant {
-  id           Int                    @id @default(autoincrement())
-  event        Event                  @relation(fields: [eventId], references: [id])
-  eventId      Int
-  user         User                   @relation(fields: [userId], references: [id])
-  userId       Int
-  assignedAt   DateTime               @default(now())
-  updatedAt    DateTime               @default(now())
-  status       EventParticipantStatus @default(PENDING)
-  travelPlan   TravelPlan?
-  travelPlanId Int?                   @unique
+  id         Int                    @id @default(autoincrement())
+  event      Event                  @relation(fields: [eventId], references: [id])
+  eventId    Int
+  user       User                   @relation(fields: [userId], references: [id])
+  userId     Int
+  assignedAt DateTime               @default(now())
+  updatedAt  DateTime               @default(now())
+  status     EventParticipantStatus @default(PENDING)
+  travelPlan TravelPlan[]
 
   @@unique([userId, eventId])
 }
@@ -97,8 +97,9 @@ model EventParticipant {
 model TravelPlan {
   id                 Int              @id @default(autoincrement())
   eventParticipant   EventParticipant @relation(fields: [eventParticipantId], references: [id])
-  eventParticipantId Int              @unique
-  plannedAt          DateTime         @default(now())
+  eventParticipantId Int
+  departAt           DateTime         @default(now())
+  arrivalBy          DateTime         @default(now())
   origin             String
   destination        String
   totalCo2           Float
