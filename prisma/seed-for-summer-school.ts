@@ -328,14 +328,14 @@ async function main() {
 
   // Places
   const placeChalmers = await prisma.place.upsert({
-    where: { googlePlaceId: '870477687384115715' },
+    where: { googlePlaceId: '14609963032858095375' },
     update: {},
     create: {
-      name: 'Chalmers University of Technology',
-      address: 'Chalmersgatan 4, 412 96 Göteborg, Sweden',
-      googlePlaceId: '870477687384115715',
-      latitude: 57.6898,
-      longtitude: 11.974162,
+      name: 'Chalmers Lindholmen University College',
+      address: 'Hörselgången 4, 417 56 Göteborg, Sweden',
+      googlePlaceId: '14609963032858095375',
+      latitude: 57.706615,
+      longtitude: 11.93666,
     },
   });
 

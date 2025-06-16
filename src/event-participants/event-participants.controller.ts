@@ -1,12 +1,12 @@
 import {
-  Controller,
-  Post,
-  Get,
-  Put,
-  Delete,
-  Param,
   Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
   ParseIntPipe,
+  Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { EventParticipantsService } from './event-participants.service';
@@ -20,7 +20,10 @@ export class EventParticipantsController {
 
   @Post()
   async createParticipant(@Body() body: { userId: number; eventId: number }) {
-    return this.participantsService.createParticipant(body);
+    return this.participantsService.createParticipant({
+      ...body,
+      status: EventParticipantStatus.ACCEPTED,
+    });
   }
 
   @Get()

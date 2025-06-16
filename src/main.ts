@@ -17,8 +17,8 @@ async function bootstrap() {
     allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
   });
-  app.use(bodyParser.json({ limit: '5mb' }));
-  app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
+  app.use(bodyParser.json({ limit: '15mb' }));
+  app.use(bodyParser.urlencoded({ limit: '15mb', extended: true }));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
